@@ -3,10 +3,12 @@ name: C/C++ CI of Pinocchio
 on: [push,pull_request]
 
 jobs:
-  build:
+  build-ubuntu:
 
     runs-on: ${{ matrix.os }}
-    
+
+    #if: False #TODO: remove
+
     strategy:
       matrix:
         os: [ubuntu-18.04,ubuntu-16.04] 
@@ -41,3 +43,30 @@ jobs:
         make test
         sudo make install
         sudo make uninstall
+
+  build-win:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-2016]
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v1
+      with: # conan 1.20.x installed from python3 would conflict
+        python-version: '2.x'
+        architecture: 'x64'
+    - name: Set and install dependencies
+      run: |
+        $ErrorActionPreference = "Stop"
+        Set-PSDebug -Trace 1
+
+        choco install pkgconfiglite -y
+        python -m pip install conan
+    - name: Run cmake
+      run: |
+        & './runcmake.ps1'
