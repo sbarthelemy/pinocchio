@@ -5,6 +5,27 @@
 #ifndef __pinocchio_macros_hpp__
 #define __pinocchio_macros_hpp__
 
+#include <boost/predef/compiler.h>
+
+#if BOOST_COMP_MSVC
+  #if (BOOST_COMP_MSVC < BOOST_VERSION_NUMBER(19, 10, 0))
+    // alternative operators representations like as "and", "not"
+    // are standard C++, but they are not supported by
+    // Microsoft C++ compiler (MSVC) by default.
+    // Starting with MSVC version 1910, passing the /permissive- option
+    // to the compiler fixes it.
+    // For earlier versions, let include the standard header which defines
+    // them.
+    //
+    // MSVC compiler version (_MSC_VER) 1910 is also know as:
+    // Visual Studio Version VS2017
+    // Visual Studio Version 15
+    // MSVC Toolset Version v141
+    // MSVC Toolset Version 14.10
+    #include <iso646.h>
+  #endif
+#endif
+
 #if __cplusplus >= 201103L
   #define PINOCCHIO_WITH_CXX11_SUPPORT
 #endif
