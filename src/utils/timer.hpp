@@ -5,7 +5,7 @@
 #ifndef __pinocchio_utils_timer_hpp__
 #define __pinocchio_utils_timer_hpp__
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #include <stdint.h> // portable: uint64_t   MSVC: __int64
 
